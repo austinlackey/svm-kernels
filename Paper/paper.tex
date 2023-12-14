@@ -15,6 +15,7 @@
 \usepackage{forest}
 \usepackage{cancel}
 \usepackage{ulem}
+\usepackage{booktabs}
 \usepackage[margin=1in]{geometry}
 
 \title{Methodology of Creating SVM Kernels from Scratch Using Python and NumPy}
@@ -27,7 +28,12 @@
 \maketitle
 
 \begin{abstract}
-This paper presents a methodology for creating Support Vector Machine (SVM) kernels from scratch using Python and NumPy. We discuss the implementation of linear, sigmoid, polynomial, and radial basis function (RBF) kernels in a binary SVM and a multiclass SVM.
+This paper presents a methodology for creating Support Vector Machine (SVM) kernels from scratch using Python and NumPy. 
+We discuss the implementation of linear, sigmoid, polynomial, and radial basis function (RBF) kernels in a binary and multiclass SVM.
+These kernels are tested on E. coli data and compared to the results of the scikit-learn SVM implementation.
+The results show that the implemented kernels often yield better accuracy than the scikit-learn implementation; at the
+cost of increased training time. Kernel training times are ran multiple times and averaged to provide a more accurate
+metric since training times are low and have a high variance.
 \end{abstract}
 
 \section{Introduction}
@@ -35,7 +41,29 @@ In this section, provide an introduction to SVMs, their applications, and the im
 
 \section{Methodology}
 In this section, describe the methodology used to create the SVM kernels from scratch.
-
+\subsection{Kernel Functions}
+We implemented four different kernel functions which are listed below.
+\begin{itemize}
+    \item Linear Kernel
+    \begin{equation}
+    K(X, Y) = X^T Y
+    \end{equation}
+    
+    \item Sigmoid Kernel
+    \begin{equation}
+    K(X, Y) = \tanh(\gamma X^T Y + r)
+    \end{equation}
+    
+    \item Polynomial Kernel
+    \begin{equation}
+    K(X, Y) = (\gamma X^T Y + r)^d, \gamma > 0
+    \end{equation}
+    
+    \item Radial Basis Function (RBF) Kernel
+    \begin{equation}
+    K(X, Y) = \exp(-\gamma ||X - Y||^2), \gamma > 0
+    \end{equation}
+\end{itemize}
 \subsection{Binary SVM}
 Discuss the implementation of the Binary SVM class, including the implementation of the different kernels.
 
@@ -44,23 +72,53 @@ Discuss the implementation of the Multiclass SVM class, which uses the Binary SV
 
 \section{Results and Discussion}
 In this section, present and discuss the results obtained using the implemented SVM kernels.
-
+\begin{table}[h]
+    \centering
+    \caption{Classifier Performance}
+    \label{tab:classifier_performance}
+    \begin{tabular}{cccccc}
+        \toprule
+        \textbf{Classifier} & \textbf{Implementation} & \textbf{Kernel} & \textbf{Avg Accuracy} & \textbf{Avg Runtime} \\
+        \midrule
+        Binary & sklearn & linear & 1.00000 & 0.00052 \\
+        Binary & custom & linear & 0.99318 & 0.00795 \\
+        Binary & sklearn & sigmoid & 0.68180 & 0.00066 \\
+        Binary & custom & sigmoid & 0.99546 & 0.00757 \\
+        Binary & sklearn & rbf & 1.00000 & 0.00054 \\
+        Binary & custom & rbf & 0.99546 & 0.00977 \\
+        Binary & sklearn & poly & 1.00000 & 0.00040 \\
+        Binary & custom & poly & 0.97498 & 0.00929 \\
+        Multi & sklearn & linear & 0.77940 & 0.00096 \\
+        Multi & custom & linear & 0.81468 & 0.15420 \\
+        Multi & sklearn & sigmoid & 0.47060 & 0.00183 \\
+        Multi & custom & sigmoid & 0.82497 & 0.15641 \\
+        Multi & sklearn & rbf & 0.75000 & 0.00156 \\
+        Multi & custom & rbf & 0.82350 & 0.19177 \\
+        Multi & sklearn & poly & 0.76470 & 0.00111 \\
+        Multi & custom & poly & 0.83967 & 0.36326 \\
+        \bottomrule
+    \end{tabular}
+    \vspace{1em}  % Add some vertical space for the note
+    \begin{tabular}{p{0.9\textwidth}}  % Create a new table for the note
+        \multicolumn{1}{l}{\textit{Note:}} These times were calculated with 10 runs for each kernel and averaged. \\
+    \end{tabular}
+\end{table}
 \section{Conclusion}
 In this section, provide a conclusion summarizing the work done and its implications.
 
 % THESE ARE EXAMPLES OF HOW TO USE BIBTEX
-\begin{thebibliography}{9}
-\bibitem{numpy}
-Travis E, Oliphant. 
-A guide to NumPy, USA: Trelgol Publishing, (2006).
+% \begin{thebibliography}{9}
+% \bibitem{numpy}
+% Travis E, Oliphant. 
+% A guide to NumPy, USA: Trelgol Publishing, (2006).
 
-\bibitem{python}
-Van Rossum, G., Drake, F.L. 
-Python 3 Reference Manual, Scotts Valley, CA: CreateSpace, (2009).
+% \bibitem{python}
+% Van Rossum, G., Drake, F.L. 
+% Python 3 Reference Manual, Scotts Valley, CA: CreateSpace, (2009).
 
-\bibitem{svm}
-Cortes, C., Vapnik, V. 
-Support-vector networks. Machine Learning, 20(3):273-297, (1995).
-\end{thebibliography}
+% \bibitem{svm}
+% Cortes, C., Vapnik, V. 
+% Support-vector networks. Machine Learning, 20(3):273-297, (1995).
+% \end{thebibliography}
 
 \end{document}
