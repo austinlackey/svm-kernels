@@ -37,10 +37,51 @@ metric since training times are low and have a high variance.
 \end{abstract}
 
 \section{Introduction}
-In this section, provide an introduction to SVMs, their applications, and the importance of kernels in SVMs.
+In this section, provide an introduction to SVMs, their applications, and the importance of
+kernels in SVMs.
+
+Support Vector Machines (SVMs) are machine learning algorithms that are used to complete classification tasks. When we have a large dimensional dataset that we would like to create decision boundaries for, we can create a hyperplane that maximizes the margin between the observations' labels. The data points that are closest to the decision boundary influence the position and direction of the hyperplane, and these close data points are called \textbf{Support Vectors}. The goal is to optimize the distance between the support vectors and the hyperplane, and so we can draw a line between the points.
+
+With higher dimensional data, sometimes a linear boundary will not be effective, and so we can implement kernel tricks. These kernels allow for the original input to be mapped to a higher-dimensional space where a linear boundary can be drawn. We will demonstrate the usage of SVMs, as well as the effect that different kernels have on the same data. 
 
 \section{Methodology}
 In this section, describe the methodology used to create the SVM kernels from scratch.
+
+When in discussion of SVMs, we need to understand the steps behind the math to know what it is doing. Here, we will discuss how this algorithm is run to calculate our optimal parameters for our hyperplane decision boundary.
+
+Our goal is to find a hyperplane in the form:
+$$f(x) = w \cdot x + b = 0$$
+
+We want our decision boundary to have a maximal margin between the hyperplane and the support vectors. These vectors are found with:
+$$w \cdot x + b \geq 1$$
+$$w \cdot x + b  \leq -1$$
+Since we want to maximize the margin in between, we can think about finding those inputs that satisfy the support vectors in the right labels. For example, if we find an $x_n$ such that it is the $n$th observation in the dataset, and it has the label $y_n = 1$, then we want this observation to be found above the positive support vector. Mathematically, we can say that:
+$$\begin{cases}
+      w \cdot x + b \geq 1 & \text{if } y = 1 \\
+      w \cdot x + b \leq -1 & \text{if } y = -1
+\end{cases}$$
+In other words, we can simply this to be:
+
+$$y_i (w \cdot x_i + b) \geq 1$$ for $i = 1,...,N$
+
+The support vectors are described, but we want to find the maximum length a unit step takes from the decision boundary to the support vectors to be optimized. Therefore, if we are given a vector $x$, with an orthogonal vector $w$ to the decision boundary, we can take a unit step from the decision boundary to the support vector by:
+$$1 = w \cdot x + b = w(x + \frac{w}{|w|^2}) + b = 1$$
+
+We know that $w \cdot x + b = 0$, so we can simplify:
+$$\frac{ww}{|w|^2} = 1$$
+$$\frac{1}{|w|}$$
+This represents half the margin of the SVM, and so we need to do it to both sides of the boundary:
+$$\frac{2}{|w|}$$
+Therefore, to maximize the margin of the hyperplane, we need to minimize $w$.
+
+We can combine this all to formulate our optimization problem: minimize $||w||$ constrained by $y_i (w \cdot x_i + b) \geq 1$ for $i = 1,...,N$
+We can set up a Lagrange dual optimization problem, such that:
+$$L = \frac{1}{2}||w||^2 - \sum_{i=1}^{n} \alpha_i \cdot [y_i(w \cdot x + b) - 1]$$
+Minimizing for $w$ and $b$, we get:
+$$w = \sum_{i=1}^{n} \alpha_i y_i x_i$$
+$$\sum_{i=1}^{n} \alpha_i y_i = 0$$
+
+Our problem 
 \subsection{Kernel Functions}
 We implemented four different kernel functions which are listed below.
 \begin{itemize}
@@ -66,6 +107,8 @@ We implemented four different kernel functions which are listed below.
 \end{itemize}
 \subsection{Binary SVM}
 Discuss the implementation of the Binary SVM class, including the implementation of the different kernels.
+
+
 
 \subsection{Multiclass SVM}
 Discuss the implementation of the Multiclass SVM class, which uses the Binary SVM class.
