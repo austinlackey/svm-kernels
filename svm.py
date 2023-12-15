@@ -66,7 +66,7 @@ def calcAccuracy(y_test, y_pred, decimal_places=4):
     accuracy = np.trace(cm) / float(np.sum(cm))
     return round(accuracy, decimal_places)
 
-def runTests(X_train_binary, X_test_binary, y_train_binary, y_test_binary, X_train_multi, X_test_multi, y_train_multi, y_test_multi, max_iter=1000, C=1.0, tol=0.001, gamma=0.1, r=1, degree=3, runs=5):
+def runTests(X_train_binary, X_test_binary, y_train_binary, y_test_binary, X_train_multi, X_test_multi, y_train_multi, y_test_multi, max_iter=1000, C=1.0, tol=0.001, gamma=1, r=1, degree=3, runs=5):
     print(c.colorize(c.BRIGHT_GREEN, 'Running Tests...'))
     from sklearn.svm import SVC
     binary_classes = np.unique(np.concatenate((y_train_binary, y_test_binary)))

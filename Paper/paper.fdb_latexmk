@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1702652429 "paper.tex" "paper.pdf" "paper" 1702652430 0
+["pdflatex"] 1702655129 "paper.tex" "paper.pdf" "paper" 1702655130 0
   "/usr/local/texlive/2023/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1136849721 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/tfm/adobe/symbol/psyr.tfm" 1136768653 1408 5937f58aa508ea2cea4901c07d10f5fe ""
@@ -214,9 +214,9 @@
   "/usr/local/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1696593134 4623355 b8cad38412faebe1ce5b780a45db67bd ""
   "/usr/local/texlive/2023/texmf-var/web2c/pdftex/pdflatex.fmt" 1696593086 7883455 3213e49428ab4bfa087dcf51b8d3ea8b ""
   "/usr/local/texlive/2023/texmf.cnf" 1678822455 577 1b2b1af17af2508fb20dd85783af4050 ""
-  "paper.aux" 1702652430 2571 d3d36809693141c567abc92b4f0423c2 "pdflatex"
-  "paper.out" 1702652430 1296 5d209a92e22af7a19112fe9bddb57ee6 "pdflatex"
-  "paper.tex" 1702652428 17140 5f69a28b6db9019253da35f5079a115a ""
+  "paper.aux" 1702655130 2571 d3d36809693141c567abc92b4f0423c2 "pdflatex"
+  "paper.out" 1702655130 1296 5d209a92e22af7a19112fe9bddb57ee6 "pdflatex"
+  "paper.tex" 1702655129 17092 02e6954c4f6c1dde972e5e69d9ba13c0 ""
   "plots/linear_binary.png" 1702629013 32235 f8d2ff65a896c5bff10566d7276ac3ef ""
   "plots/linear_multi.png" 1702629094 48647 70d81efa0f7e82260998f749c753acde ""
   "plots/poly_binary.png" 1702629064 33325 a654df82b29baa676393eb3bb64462eb ""

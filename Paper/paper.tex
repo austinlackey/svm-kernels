@@ -34,20 +34,20 @@ This paper presents a methodology for creating Support Vector Machine (SVM) kern
 We discuss the implementation of linear, sigmoid, polynomial, and radial basis function (RBF) kernels in a binary and multiclass SVM.
 These kernels are tested on E. coli data and compared to the results of the scikit-learn SVM implementation.
 The goal of the E. coli dataset is to predict the localization sites of proteins inside the cell. 
-The results show that the implemented kernels often yield better accuracy than the scikit-learn implementation; at the
-cost of increased training time. Kernel training times are ran multiple times and averaged to provide a more accurate
+The results show that the implemented kernels will sometimes yield better accuracy than the scikit-learn implementation; at the
+cost of increased training time. Kernel training times are run multiple times and averaged to provide a more accurate
 metric since training times are low and have a high variance.
 \end{abstract}
 
 \section{Introduction}
 
-Support Vector Machines (\textbf{SVMs}) are machine learning algorithms that are used to complete classification tasks. When we have a large dimensional data set that we would like to create decision boundaries, we can create a hyperplane that maximizes the margin between the observations' labels. The data points that are closest to the decision boundary influence the position and direction of the hyperplane, and these close data points are called \textbf{Support Vectors}. The goal is to optimize the distance between the support vectors and the hyperplane (also known as the \textbf{margin}), and so we can draw a line between the points.
+Support Vector Machines (\textbf{SVMs}) are machine learning algorithms that are used to complete classification tasks. When we have a large dimensional data set that we would like to create decision boundaries, we can create a hyperplane that maximizes the margin between the observations' labels. The data points that are closest to the decision boundary influence the position and direction of the hyperplane, and these close data points are called \textbf{Support Vectors}. The goal is to optimize the distance between the support vectors and the hyperplane (also known as the \textbf{margin}), so we can draw a line between the points.
 
-With higher dimensional data, sometimes a linear boundary will not be effective, and so we can implement kernel tricks. These kernels allow for the original input to be mapped to a higher-dimensional space where a linear boundary can be drawn. We will demonstrate the usage of SVMs, as well as the effect that different kernels have on the same data. 
+With higher dimensional data, sometimes a linear boundary will not be effective, and so we can implement kernel tricks. These kernels allow for the original input to be mapped to a higher-dimensional space where a linear boundary can be drawn. We will demonstrate the usage of SVMs and the effect that different kernels have on the same data. 
 
 \section{Methodology}
 
-When in discussion of SVMs, we need to understand the steps behind the math to know what it is doing. Here, we will discuss how this algorithm is run to calculate our optimal parameters for our hyperplane decision boundary.
+When discussing SVMs, we need to understand the steps behind the math to know what it is doing. Here, we will discuss how this algorithm calculates our optimal parameters for our hyperplane decision boundary.
 
 Our goal is to find a hyperplane in the form:
 $$f(x) = w \cdot x + b = 0$$
@@ -74,14 +74,14 @@ This represents half the margin of the SVM, and so we need to do it to both side
 $$\frac{2}{|w|}$$
 Therefore, to maximize the margin of the hyperplane, we need to minimize $w$.
 
-We can combine this all to formulate our optimization problem: minimize $||w||$ constrained by $y_i (w \cdot x_i + b) \geq 1$ for $i = 1,...,N$.
+We can combine this all to formulate our optimization problem: minimize $||w||$ constrained by $y_i (w \cdot x_i + b) \geq 1$ for $i = 1,..., N$.
 We can set up a Lagrange dual optimization problem, such that:
 $$L = \frac{1}{2}||w||^2 - \sum_{i=1}^{n} \alpha_i \cdot [y_i(w \cdot x + b) - 1]$$
 Minimizing for $w$ and $b$, we get:
 $$w = \sum_{i=1}^{n} \alpha_i y_i x_i$$
 $$\sum_{i=1}^{n} \alpha_i y_i = 0$$
 
-Our problem can now be in terms of a constrained minimization problem by plugging in the constraints we got. This can be simplified into a quadratic form. The final form of our problem will be
+Our problem can now be in terms of a constrained minimization problem by plugging in the constraints we have. This can be simplified into a quadratic form. The final form of our problem will be
 
 \begin{equation}
     L = 1^T \alpha - \frac{1}{2}\alpha^TX^TX\alpha
@@ -119,7 +119,7 @@ The $k$ is found using the different kernel equations [(2)-(5)], which allows fo
 
 \subsection{Binary SVM}
 
-A binary classification on the data is the foundation of the calculations. We want to form a hyperplane that separates two labels effectively, with a margin for error when making predictions on new observations. The steps to complete to find the terms for our hyperplane can be seen below:
+A binary classification of the data is the foundation of the calculations. We want to form a hyperplane that separates two labels effectively, with a margin for error when making predictions on new observations. The steps to complete to find the terms for our hyperplane can be seen below:
 
 \begin{itemize}
     \item For each training example $(\mathbf{x}_i, y_i)$:
@@ -154,12 +154,12 @@ A binary classification on the data is the foundation of the calculations. We wa
     \end{itemize}
 \end{itemize}
 
-Using this algorithm, you are able to find the $w$'s and $b$ that define the hyperplane between the two classes. The $K()$ function represents the kernel that is being used, and so this is where the different transformations will have an effect. 
+Using this algorithm, you can find the $w$'s and $b$ that define the hyperplane between the two classes. The $K()$ function represents the kernel that is being used, and so this is where the different transformations will have an effect. 
 
 \subsection{Multiclass SVM}
-The multi-classification on a data set using SVM is only a slight variation from the binary classification. In binary, we trained the model on a \textbf{1 vs 1} basis. We had two classes, -1 and 1, and wanted to create a decision boundary between them. However, multiple classes means that we have more than two classes, and you can't just draw one line to separate the labels.
+The multi-classification on a data set using SVM is only a slight variation from the binary classification. In binary, we trained the model on a \textbf{1 vs 1} basis. We had two classes, -1 and 1, and wanted to create a decision boundary between them. However, multiple classes mean that we have more than two classes, and you can't just draw one line to separate the labels.
 
-Therefore, the meta-algorithm for multi-class is to approach with a \textbf{one vs others} mindset. For however many classes you have, you want to create a decision boundary between one class and all the others, and repeating this until you have done so for each label. It follows the same steps as binary classification, but does it $s$ times for the number of labels in the data set to differentiate. 
+Therefore, the meta-algorithm for multi-class is to approach with a \textbf{one vs others} mindset. For however many classes you have, you want to create a decision boundary between one class and all the others and repeat this until you have done so for each label. It follows the same steps as binary classification, but does it $s$ times for the number of labels in the data set to differentiate. 
 \section{Data Overview}
 The data is composed of seven predictors of type float, with the last column being the localization site class label.
 There were 336 total observations in the data set, and the class labels were not evenly distributed.
@@ -200,22 +200,22 @@ The results of the training times and accuracy can be seen in Table \ref{tab:cla
         \toprule
         \textbf{Classifier} & \textbf{Implementation} & \textbf{Kernel} & \textbf{Avg Accuracy} & \textbf{Avg Runtime} \\
         \midrule
-        Binary & sklearn & linear & 1.00000 & 0.00052 \\
-        Binary & custom & linear & 0.99318 & 0.00795 \\
-        Binary & sklearn & sigmoid & 0.68180 & 0.00066 \\
-        Binary & custom & sigmoid & 0.99546 & 0.00757 \\
-        Binary & sklearn & rbf & 1.00000 & 0.00054 \\
-        Binary & custom & rbf & 0.99546 & 0.00977 \\
-        Binary & sklearn & poly & 1.00000 & 0.00040 \\
-        Binary & custom & poly & 0.97498 & 0.00929 \\
-        Multi & sklearn & linear & 0.77940 & 0.00096 \\
-        Multi & custom & linear & 0.81468 & 0.15420 \\
-        Multi & sklearn & sigmoid & 0.47060 & 0.00183 \\
-        Multi & custom & sigmoid & 0.82497 & 0.15641 \\
-        Multi & sklearn & rbf & 0.75000 & 0.00156 \\
-        Multi & custom & rbf & 0.82350 & 0.19177 \\
-        Multi & sklearn & poly & 0.76470 & 0.00111 \\
-        Multi & custom & poly & 0.83967 & 0.36326 \\
+        Binary & sklearn & linear & 1 & 0.00119 \\
+        Binary & custom & linear & 0.99318 & 0.00719 \\
+        Binary & sklearn & sigmoid & 0.6818 & 0.00069 \\
+        Binary & custom & sigmoid & 0.95908 & 0.05421 \\
+        Binary & sklearn & rbf & 1 & 0.00034 \\
+        Binary & custom & rbf & 0.99546 & 0.00773 \\
+        Binary & sklearn & poly & 1 & 0.00035 \\
+        Binary & custom & poly & 0.95909 & 0.00926 \\
+        Multi & sklearn & linear & 0.7794 & 0.00094 \\
+        Multi & custom & linear & 0.81762 & 0.13374 \\
+        Multi & sklearn & sigmoid & 0.4706 & 0.00199 \\
+        Multi & custom & sigmoid & 0.68826 & 1.50449 \\
+        Multi & sklearn & rbf & 0.8824 & 0.00111 \\
+        Multi & custom & rbf & 0.82939 & 0.17472 \\
+        Multi & sklearn & poly & 0.8529 & 0.00107 \\
+        Multi & custom & poly & 0.84849 & 0.32641 \\
         \bottomrule
     \end{tabular}
     \vspace{1em}  % Add some vertical space for the note
@@ -293,7 +293,7 @@ We can see that the linear kernel has a linear decision boundary which is expect
 This paper presented a methodology for creating Support Vector Machine (SVM) kernels from scratch using Python and NumPy.
 We discussed the implementation of linear, sigmoid, polynomial, and radial basis function (RBF) kernels in a binary and multiclass SVM
 and how Binary SVMs are used underneath the hood of multiclass SVMs. These kernels were tested on E. coli data and compared to the results
-of the scikit-learn SVM implementation. The results show that the implemented kernels often yield better accuracy than the scikit-learn
+of the scikit-learn SVM implementation. The results show that the implemented kernels can often yield better accuracy than the scikit-learn
 implementation; at the cost of increased training time. Kernel training times were ran multiple times and averaged to provide a more
 accurate metric as training times were low and had a high variance. By harnessing the power of dimensionality reduction, we were
 able to show the decision boundaries in 2 dimensions while still retaining the accuracy of higher dimensional data. These 
