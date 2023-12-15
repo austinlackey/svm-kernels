@@ -33,21 +33,19 @@
 This paper presents a methodology for creating Support Vector Machine (SVM) kernels from scratch using Python and NumPy. 
 We discuss the implementation of linear, sigmoid, polynomial, and radial basis function (RBF) kernels in a binary and multiclass SVM.
 These kernels are tested on E. coli data and compared to the results of the scikit-learn SVM implementation.
+The goal of the E. coli dataset is to predict the localization sites of proteins inside the cell. 
 The results show that the implemented kernels often yield better accuracy than the scikit-learn implementation; at the
 cost of increased training time. Kernel training times are ran multiple times and averaged to provide a more accurate
 metric since training times are low and have a high variance.
 \end{abstract}
 
 \section{Introduction}
-In this section, provide an introduction to SVMs, their applications, and the importance of
-kernels in SVMs.
 
 Support Vector Machines (\textbf{SVMs}) are machine learning algorithms that are used to complete classification tasks. When we have a large dimensional data set that we would like to create decision boundaries, we can create a hyperplane that maximizes the margin between the observations' labels. The data points that are closest to the decision boundary influence the position and direction of the hyperplane, and these close data points are called \textbf{Support Vectors}. The goal is to optimize the distance between the support vectors and the hyperplane (also known as the \textbf{margin}), and so we can draw a line between the points.
 
 With higher dimensional data, sometimes a linear boundary will not be effective, and so we can implement kernel tricks. These kernels allow for the original input to be mapped to a higher-dimensional space where a linear boundary can be drawn. We will demonstrate the usage of SVMs, as well as the effect that different kernels have on the same data. 
 
 \section{Methodology}
-In this section, describe the methodology used to create the SVM kernels from scratch.
 
 When in discussion of SVMs, we need to understand the steps behind the math to know what it is doing. Here, we will discuss how this algorithm is run to calculate our optimal parameters for our hyperplane decision boundary.
 
@@ -120,7 +118,6 @@ $$(k^Tk)_{ij} = \sum_{d'} y_i k_{id'} \cdot y_j k_{jd'} = \sum_{d'} y_i y_k \cdo
 The $k$ is found using the different kernel equations [(2)-(5)], which allows for versatility in the shape of the boundary line. It is the optimal decision boundary that contains 
 
 \subsection{Binary SVM}
-Discuss the implementation of the Binary SVM class, including the implementation of the different kernels.
 
 A binary classification on the data is the foundation of the calculations. We want to form a hyperplane that separates two labels effectively, with a margin for error when making predictions on new observations. The steps to complete to find the terms for our hyperplane can be seen below:
 
@@ -163,7 +160,32 @@ Using this algorithm, you are able to find the $w$'s and $b$ that define the hyp
 The multi-classification on a data set using SVM is only a slight variation from the binary classification. In binary, we trained the model on a \textbf{1 vs 1} basis. We had two classes, -1 and 1, and wanted to create a decision boundary between them. However, multiple classes means that we have more than two classes, and you can't just draw one line to separate the labels.
 
 Therefore, the meta-algorithm for multi-class is to approach with a \textbf{one vs others} mindset. For however many classes you have, you want to create a decision boundary between one class and all the others, and repeating this until you have done so for each label. It follows the same steps as binary classification, but does it $s$ times for the number of labels in the data set to differentiate. 
-
+\section{Data Overview}
+The data is composed of seven predictors of type float, with the last column being the localization site class label.
+There were 336 total observations in the data set, and the class labels were not evenly distributed.
+As you can see below, the class labels \textit{cp} and \textit{im} make up the majority of the data set.
+We used these two classes as the positive and negative classes for the binary SVMs as they were the most common.
+\begin{table}[h]
+    \centering
+    \caption{Class Frequency}
+    \label{tab:class_frequency}
+    \begin{tabular}{cc}
+        \toprule
+        \textbf{Class} & \textbf{Frequency} \\
+        \midrule
+        cp & 143 \\
+        im & 77 \\
+        pp & 52 \\
+        imU & 35 \\
+        om & 20 \\
+        omL & 5 \\
+        imS & 2 \\
+        imL & 2 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+For a test/train split, we used 80\% of the data for training and 20\% for testing.
+This resulted in 268 training observations for the multi-class SVMs and 176 training observations for the binary SVMs.
 \section{Results and Discussion}
 \subsection{Training Time and Accuracy}
 After implimenting the SVM kernels for both binary and multiclass classification, we tested the kernels on the E. coli data set.
