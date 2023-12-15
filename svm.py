@@ -7,10 +7,11 @@ from sklearn.metrics import confusion_matrix # evaluation metric
 import matplotlib.pyplot as plt # for visualization
 import seaborn as sns # for visualization
 from colors import Color as c # for text colors
+from sklearn.decomposition import PCA # for data reduction
 # c.examples()
 
 
-def load_data(log=True, test_size=0.2, random_state=42, binaryClasses=['cp', 'im']):
+def load_data(log=True, test_size=0.2, random_state=42, binaryClasses=['cp', 'im'], reduce=False):
     print(c.colorize(c.BRIGHT_GREEN, 'Loading Data...'))
     print("test_size: ", test_size)
     print("random_state: ", random_state)
@@ -19,16 +20,26 @@ def load_data(log=True, test_size=0.2, random_state=42, binaryClasses=['cp', 'im
     column_names = ['seq_name', 'mcg', 'gvh', 'lip', 'chg', 'aac', 'alm1', 'alm2', 'class']
     df = pd.read_csv('data/ecoli.data', sep='\s+', names=column_names)
 
+    # Reduce Data
+    if reduce:
+        pca = PCA(n_components=2)
+        df_reduced = pca.fit_transform(df.drop(['seq_name', 'class'], axis=1))
+        df_reduced = pd.DataFrame(df_reduced)
+        df_reduced['class'] = df['class']
+        df = df_reduced
+    else:
+        df = df.drop(['seq_name'], axis=1)
+
     # Binary Classification Dataset
     df_binary = df[df['class'].isin(binaryClasses)] # Selecting only two classes
-    X_binary = df_binary.drop(['seq_name', 'class'], axis=1)
+    X_binary = df_binary.drop(['class'], axis=1)
     X_binary = X_binary.astype(float)
     X_binary = X_binary.values
     y_binary = df_binary['class']
     X_train_binary, X_test_binary, y_train_binary, y_test_binary = train_test_split(X_binary, y_binary, test_size=test_size, random_state=random_state)
 
     # Multi-class Classification Dataset
-    X_multi = df.drop(['seq_name', 'class'], axis=1)
+    X_multi = df.drop(['class'], axis=1)
     X_multi = X_multi.astype(float)
     X_multi = X_multi.values
     y_multi = df['class']

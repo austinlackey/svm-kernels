@@ -1,5 +1,4 @@
 \documentclass[12pt]{article}
-\documentclass[12pt]{article}
 \usepackage{hyperref}
 \usepackage{authblk}
 \usepackage{graphicx}
@@ -16,7 +15,9 @@
 \usepackage{forest}
 \usepackage{cancel}
 \usepackage{ulem}
+\usepackage{subcaption}
 \usepackage{booktabs}
+\usepackage{placeins}
 \usepackage[margin=1in]{geometry}
 
 \title{Methodology of Creating SVM Kernels from Scratch Using Python and NumPy}
@@ -164,7 +165,11 @@ The multi-classification on a data set using SVM is only a slight variation from
 Therefore, the meta-algorithm for multi-class is to approach with a \textbf{one vs others} mindset. For however many classes you have, you want to create a decision boundary between one class and all the others, and repeating this until you have done so for each label. It follows the same steps as binary classification, but does it $s$ times for the number of labels in the data set to differentiate. 
 
 \section{Results and Discussion}
-In this section, present and discuss the results obtained using the implemented SVM kernels.
+\subsection{Training Time and Accuracy}
+After implimenting the SVM kernels for both binary and multiclass classification, we tested the kernels on the E. coli data set.
+Since training times were low and had a higher variance, we ran each kernel 10 times and averaged the results.
+This allows for a more accurate representation of the training time for each kernel to prevent outliers from skewing the results.
+The results of the training times and accuracy can be seen in Table \ref{tab:classifier_performance}.
 \begin{table}[h]
     \centering
     \caption{Classifier Performance}
@@ -196,22 +201,81 @@ In this section, present and discuss the results obtained using the implemented 
         \multicolumn{1}{l}{\textit{Note:}} These times were calculated with 10 runs for each kernel and averaged. \\
     \end{tabular}
 \end{table}
+\FloatBarrier 
+I think that the results are interesting because the custom implementation of the kernels often outperformed the scikit-learn implementation.
+However, the custom implementation of the kernels took significantly longer to train. Since we used Stochastic Gradient Descent (SGD) to train the SVMs, 
+the convergence can take a long time. In Sklearn, they use LibSVM which is a C++ library that is much faster than our custom implementation.
+Although the multi-class SVMs had lower accuracy than the binary SVMs, the training times were much higher. This makes sense because the multi-class SVMs
+are just a combination of binary SVMs and the decision boundaries start to become more complex and harder to fit accurately.
+\FloatBarrier 
+\subsection{Decision Boundaries}
+The decision boundaries for the binary and multi-class SVMs can be seen in Figures 1 and 2.
+In Figure 1, the decision boundaries for the binary SVMs are shown. We can see how each kernel affects the decision boundary.
+Although these examples are intuitive and easy to understand, the data was reduced to 2 dimensions using Principal Component Analysis (PCA).
+We decided to use PCA to reduce the dimensionality of the data because we knew that the training data would retain more information than 
+regular feature selection. By implementing feature extraction, we were able to reduce the dimensionality of the data while retaining more information.
+This allows us to show the decision boundaries in 2 dimensions while still retaining the accuracy of the SVMs.
+
+For the binary SVMs, we selected the classes \textit{cp} and \textit{im} to be the positive and negative classes respectively.
+We can see that the linear kernel has a linear decision boundary which is expected and the rest of the kernels have non-linear decision boundaries.
+\begin{figure}
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{plots/linear_binary.png}
+        \caption{Linear Binary SVM}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{plots/poly_binary.png}
+        \caption{Polynomial Binary SVM}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{plots/rbf_binary.png}
+        \caption{RBF Binary SVM}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{plots/sigmoid_binary.png}
+        \caption{sigmoid Binary SVM}
+    \end{subfigure}
+    \caption{Binary SVM Decision Boundaries}
+\end{figure}
+\begin{figure}
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{plots/linear_multi.png}
+        \caption{Linear Multi-Class SVM}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{plots/poly_multi.png}
+        \caption{Polynomial Multi-Class SVM}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{plots/rbf_multi.png}
+        \caption{RBF Multi-Class SVM}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{plots/sigmoid_multi.png}
+        \caption{sigmoid Multi-Class SVM}
+    \end{subfigure}
+    \caption{Multi-Class SVM Decision Boundaries}
+\end{figure}
+\FloatBarrier 
 \section{Conclusion}
-In this section, provide a conclusion summarizing the work done and its implications.
-
-% THESE ARE EXAMPLES OF HOW TO USE BIBTEX
-% \begin{thebibliography}{9}
-% \bibitem{numpy}
-% Travis E, Oliphant. 
-% A guide to NumPy, USA: Trelgol Publishing, (2006).
-
-% \bibitem{python}
-% Van Rossum, G., Drake, F.L. 
-% Python 3 Reference Manual, Scotts Valley, CA: CreateSpace, (2009).
-
-% \bibitem{svm}
-% Cortes, C., Vapnik, V. 
-% Support-vector networks. Machine Learning, 20(3):273-297, (1995).
-% \end{thebibliography}
+This paper presented a methodology for creating Support Vector Machine (SVM) kernels from scratch using Python and NumPy.
+We discussed the implementation of linear, sigmoid, polynomial, and radial basis function (RBF) kernels in a binary and multiclass SVM
+and how Binary SVMs are used underneath the hood of multiclass SVMs. These kernels were tested on E. coli data and compared to the results
+of the scikit-learn SVM implementation. The results show that the implemented kernels often yield better accuracy than the scikit-learn
+implementation; at the cost of increased training time. Kernel training times were ran multiple times and averaged to provide a more
+accurate metric as training times were low and had a high variance. By harnessing the power of dimensionality reduction, we were
+able to show the decision boundaries in 2 dimensions while still retaining the accuracy of higher dimensional data. These 
+decision boundaries show how each kernel can affect the shape of the classification boundary and how the kernels can be used to
+classify non-linear data.
 
 \end{document}
